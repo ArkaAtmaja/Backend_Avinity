@@ -47,10 +47,16 @@ class MenuController extends Controller
 
     public function search(Request $request)
     {
-        $q = $request->query('q');
+        $q = $request->query('q', '');
 
-        return Menu::where('nama', 'like', "%$q%")
-            ->orWhere('kategori', 'like', "%$q%")
-            ->get();
+        return Menu::where(function ($query) use ($q) {
+            $query->where('nama', 'LIKE', "%$q%")
+                ->orWhere('kategori', 'LIKE', "%$q%");
+        })->get();
     }
+
+
+
+
+
 }
